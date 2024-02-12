@@ -224,8 +224,8 @@ graph LR;
   npmcli-package-json-->proc-log;
   npmcli-package-json-->semver;
   npmcli-run-script-->npmcli-node-gyp["@npmcli/node-gyp"];
+  npmcli-run-script-->npmcli-package-json["@npmcli/package-json"];
   npmcli-run-script-->npmcli-promise-spawn["@npmcli/promise-spawn"];
-  npmcli-run-script-->read-package-json-fast;
   npmcli-smoke-tests-->npmcli-eslint-config["@npmcli/eslint-config"];
   npmcli-smoke-tests-->npmcli-mock-registry["@npmcli/mock-registry"];
   npmcli-smoke-tests-->npmcli-promise-spawn["@npmcli/promise-spawn"];
@@ -261,20 +261,15 @@ graph LR;
 ## all dependencies
 ```mermaid
 graph LR;
-  abort-controller-->event-target-shim;
   agent-base-->debug;
   aggregate-error-->clean-stack;
   aggregate-error-->indent-string;
   ansi-styles-->color-convert;
-  are-we-there-yet-->delegates;
-  are-we-there-yet-->readable-stream;
   bin-links-->cmd-shim;
   bin-links-->npm-normalize-package-bin;
   bin-links-->read-cmd-shim;
   bin-links-->write-file-atomic;
   brace-expansion-->balanced-match;
-  buffer-->base64-js;
-  buffer-->ieee754;
   builtins-->semver;
   cacache-->fs-minipass;
   cacache-->glob;
@@ -562,7 +557,6 @@ graph LR;
   npm-->spawk;
   npm-->spdx-expression-parse;
   npm-->ssri;
-  npm-->strip-ansi;
   npm-->supports-color;
   npm-->tap;
   npm-->tar;
@@ -708,8 +702,8 @@ graph LR;
   npmcli-query-->postcss-selector-parser;
   npmcli-run-script-->node-gyp;
   npmcli-run-script-->npmcli-node-gyp["@npmcli/node-gyp"];
+  npmcli-run-script-->npmcli-package-json["@npmcli/package-json"];
   npmcli-run-script-->npmcli-promise-spawn["@npmcli/promise-spawn"];
-  npmcli-run-script-->read-package-json-fast;
   npmcli-run-script-->which;
   npmcli-smoke-tests-->npmcli-eslint-config["@npmcli/eslint-config"];
   npmcli-smoke-tests-->npmcli-mock-registry["@npmcli/mock-registry"];
@@ -759,23 +753,24 @@ graph LR;
   read-package-json-->npm-normalize-package-bin;
   read-package-json-fast-->json-parse-even-better-errors;
   read-package-json-fast-->npm-normalize-package-bin;
-  readable-stream-->abort-controller;
-  readable-stream-->buffer;
-  readable-stream-->events;
-  readable-stream-->process;
-  readable-stream-->string_decoder;
   semver-->lru-cache;
   shebang-command-->shebang-regex;
   sigstore-->sigstore-bundle["@sigstore/bundle"];
+  sigstore-->sigstore-core["@sigstore/core"];
   sigstore-->sigstore-protobuf-specs["@sigstore/protobuf-specs"];
   sigstore-->sigstore-sign["@sigstore/sign"];
   sigstore-->sigstore-tuf["@sigstore/tuf"];
+  sigstore-->sigstore-verify["@sigstore/verify"];
   sigstore-bundle-->sigstore-protobuf-specs["@sigstore/protobuf-specs"];
   sigstore-sign-->make-fetch-happen;
   sigstore-sign-->sigstore-bundle["@sigstore/bundle"];
+  sigstore-sign-->sigstore-core["@sigstore/core"];
   sigstore-sign-->sigstore-protobuf-specs["@sigstore/protobuf-specs"];
   sigstore-tuf-->sigstore-protobuf-specs["@sigstore/protobuf-specs"];
   sigstore-tuf-->tuf-js;
+  sigstore-verify-->sigstore-bundle["@sigstore/bundle"];
+  sigstore-verify-->sigstore-core["@sigstore/core"];
+  sigstore-verify-->sigstore-protobuf-specs["@sigstore/protobuf-specs"];
   socks-->ip;
   socks-->smart-buffer;
   socks-proxy-agent-->agent-base;
@@ -790,7 +785,6 @@ graph LR;
   string-width-->emoji-regex;
   string-width-->is-fullwidth-code-point;
   string-width-->strip-ansi;
-  string_decoder-->safe-buffer;
   strip-ansi-->ansi-regex;
   tar-->chownr;
   tar-->fs-minipass;
@@ -829,9 +823,10 @@ packages higher up the chain.
  - @npmcli/mock-registry, libnpmdiff, libnpmfund, libnpmpack
  - @npmcli/arborist
  - @npmcli/metavuln-calculator
- - pacote, libnpmhook, libnpmorg, libnpmsearch, libnpmteam, npm-profile
- - npm-registry-fetch, @npmcli/package-json, libnpmversion
+ - pacote, libnpmversion
+ - @npmcli/run-script, libnpmhook, libnpmorg, libnpmsearch, libnpmteam, npm-profile
+ - @npmcli/package-json, npm-registry-fetch
  - @npmcli/git, make-fetch-happen, @npmcli/config, init-package-json
- - @npmcli/installed-package-contents, @npmcli/map-workspaces, cacache, npm-pick-manifest, @npmcli/run-script, read-package-json, promzard
- - @npmcli/docs, @npmcli/fs, npm-bundled, read-package-json-fast, unique-filename, npm-install-checks, npm-package-arg, npm-packlist, normalize-package-data, bin-links, nopt, npmlog, parse-conflict-json, @npmcli/mock-globals, read
+ - @npmcli/installed-package-contents, @npmcli/map-workspaces, cacache, npm-pick-manifest, read-package-json, promzard
+ - @npmcli/docs, @npmcli/fs, npm-bundled, read-package-json-fast, unique-filename, npm-install-checks, npm-package-arg, normalize-package-data, npm-packlist, bin-links, nopt, npmlog, parse-conflict-json, @npmcli/mock-globals, read
  - @npmcli/eslint-config, @npmcli/template-oss, ignore-walk, semver, npm-normalize-package-bin, @npmcli/name-from-folder, json-parse-even-better-errors, fs-minipass, ssri, unique-slug, @npmcli/promise-spawn, hosted-git-info, proc-log, validate-npm-package-name, @npmcli/node-gyp, @npmcli/agent, minipass-fetch, @npmcli/query, cmd-shim, read-cmd-shim, write-file-atomic, abbrev, are-we-there-yet, gauge, minify-registry-metadata, ini, @npmcli/disparity-colors, mute-stream, npm-audit-report, npm-user-validate
