@@ -1,9 +1,9 @@
-const { join, dirname } = require('path')
-const { promisify } = require('util')
-const fs = require('fs/promises')
-const http = require('http')
-const https = require('https')
-const zlib = require('zlib')
+const { join, dirname } = require('node:path')
+const { promisify } = require('node:util')
+const fs = require('node:fs/promises')
+const http = require('node:http')
+const https = require('node:https')
+const zlib = require('node:zlib')
 const mrm = require('minify-registry-metadata')
 
 const gzip = promisify(zlib.gzip)
@@ -240,18 +240,6 @@ exports.registry = `http://localhost:${PORT}/`
 
 exports.start = startServer
 exports.stop = () => exports.server.close()
-
-exports.oneSocket = (t) => {
-  t.comment('using http.Agent with maxSockets:1, this is a hack that should be fixed')
-  // work around an unknown issue for know where agents on localhost need a
-  // low maxSockets to avoid ECONNRESET issues when dealing with ipv4 and ipv6
-  // dns resolution (i think)
-  return {
-    agent: new http.Agent({
-      maxSockets: 1,
-    }),
-  }
-}
 
 if (require.main === module) {
   startServer()

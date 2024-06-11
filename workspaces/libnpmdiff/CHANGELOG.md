@@ -1,5 +1,90 @@
 # Changelog
 
+## [6.1.3](https://github.com/npm/cli/compare/libnpmdiff-v6.1.2...libnpmdiff-v6.1.3) (2024-05-29)
+
+### Bug Fixes
+
+* [`2d1d8d0`](https://github.com/npm/cli/commit/2d1d8d0ef18a10ac7938380884745f1d3c3cb078) [#7559](https://github.com/npm/cli/pull/7559) adds `node:` specifier to all native node modules (#7559) (@reggi)
+
+
+### Dependencies
+
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.5.3): `@npmcli/arborist@7.5.3`
+
+## [6.1.2](https://github.com/npm/cli/compare/libnpmdiff-v6.1.1...libnpmdiff-v6.1.2) (2024-05-15)
+
+### Dependencies
+
+* [`ea0b07d`](https://github.com/npm/cli/commit/ea0b07da149767265f11d5d77d2156e2c9f43e63) [#7482](https://github.com/npm/cli/pull/7482) `pacote@18.0.6`
+* [`a9a6dcd`](https://github.com/npm/cli/commit/a9a6dcd4427ec82e491a2cad5672d8183e12180f) [#7480](https://github.com/npm/cli/pull/7480) `pacote@18.0.5`
+## [6.1.2](https://github.com/npm/cli/compare/libnpmdiff-v6.1.1...libnpmdiff-v6.1.2) (2024-05-15)
+
+### Dependencies
+
+* [`ea0b07d`](https://github.com/npm/cli/commit/ea0b07da149767265f11d5d77d2156e2c9f43e63) [#7482](https://github.com/npm/cli/pull/7482) `pacote@18.0.6`
+* [`a9a6dcd`](https://github.com/npm/cli/commit/a9a6dcd4427ec82e491a2cad5672d8183e12180f) [#7480](https://github.com/npm/cli/pull/7480) `pacote@18.0.5`
+
+### Chores
+
+* [`9c4d3c4`](https://github.com/npm/cli/commit/9c4d3c402c77bd7aaa514ee9e02d7fd87223343e) [#7467](https://github.com/npm/cli/pull/7467) template-oss-apply (@lukekarrys)
+* [`2b7ec54`](https://github.com/npm/cli/commit/2b7ec54f52f9e8aee568ccb4e34ce4a5733af21a) [#7467](https://github.com/npm/cli/pull/7467) `template-oss@4.22.0` (@lukekarrys)
+
+### Chores
+
+* [`9c4d3c4`](https://github.com/npm/cli/commit/9c4d3c402c77bd7aaa514ee9e02d7fd87223343e) [#7467](https://github.com/npm/cli/pull/7467) template-oss-apply (@lukekarrys)
+* [`2b7ec54`](https://github.com/npm/cli/commit/2b7ec54f52f9e8aee568ccb4e34ce4a5733af21a) [#7467](https://github.com/npm/cli/pull/7467) `template-oss@4.22.0` (@lukekarrys)
+
+## [6.1.1](https://github.com/npm/cli/compare/libnpmdiff-v6.1.0...libnpmdiff-v6.1.1) (2024-04-30)
+
+### Bug Fixes
+
+* [`3ec86a0`](https://github.com/npm/cli/commit/3ec86a0e258b1d5f5182f0093adf43c54e82578e) [#7456](https://github.com/npm/cli/pull/7456) linting: no-unused-vars (#7456) (@wraithgar)
+* [`57ebebf`](https://github.com/npm/cli/commit/57ebebf03d55d4eda2b6439149a97b595a191aaf) [#7418](https://github.com/npm/cli/pull/7418) update repository.url in package.json (#7418) (@wraithgar)
+
+### Dependencies
+
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.5.1): `@npmcli/arborist@7.5.1`
+
+## [6.1.0](https://github.com/npm/cli/compare/libnpmdiff-v6.0.9...libnpmdiff-v6.1.0) (2024-04-25)
+
+### Features
+
+* [`9622597`](https://github.com/npm/cli/commit/9622597399ec93224fddf90a9209a98dbcfd6b2f) [#7339](https://github.com/npm/cli/pull/7339) refactor terminal display (#7339) (@lukekarrys)
+
+### Bug Fixes
+
+* [`03958c3`](https://github.com/npm/cli/commit/03958c375cd8fa9ec6d84ad35b7cc5cf5e9136f6) [#7409](https://github.com/npm/cli/pull/7409) inline color selector in libnpmdiff (@wraithgar)
+
+### Dependencies
+
+* [`36adff3`](https://github.com/npm/cli/commit/36adff36c41f56315fe582e1e4dda29060f7fdf7) [#7408](https://github.com/npm/cli/pull/7408) `pacote@18.0.2`
+* [`486d46c`](https://github.com/npm/cli/commit/486d46cd5b5678ad1ab6c23ee12cf7559477805a) [#7408](https://github.com/npm/cli/pull/7408) `@npmcli/installed-package-contents@2.1.0`
+* [`b0ca163`](https://github.com/npm/cli/commit/b0ca16310d9db944dd13f80ecce534c65eea42c5) [#7409](https://github.com/npm/cli/pull/7409) remove @npmcli/disparity-colors
+* [`9027266`](https://github.com/npm/cli/commit/90272661b16d861a5926af8ec394d32ec0f307fd) [#7373](https://github.com/npm/cli/pull/7373) `pacote@18.0.0`
+* [`ac98fd3`](https://github.com/npm/cli/commit/ac98fd3a8514f2552555d2b8af74a52e64888797) [#7373](https://github.com/npm/cli/pull/7373) `npm-package-arg@11.0.2`
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.5.0): `@npmcli/arborist@7.5.0`
+
+## [6.0.9](https://github.com/npm/cli/compare/libnpmdiff-v6.0.8...libnpmdiff-v6.0.9) (2024-04-10)
+
+### Dependencies
+
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.4.2): `@npmcli/arborist@7.4.2`
+
+## [6.0.8](https://github.com/npm/cli/compare/libnpmdiff-v6.0.7...libnpmdiff-v6.0.8) (2024-04-03)
+
+### Dependencies
+
+* [`9ccff72`](https://github.com/npm/cli/commit/9ccff72c332e6062e6ebcf8123c7888d8d617091) [#7329](https://github.com/npm/cli/pull/7329) `tar@6.2.1`
+* [`6fd94f2`](https://github.com/npm/cli/commit/6fd94f249f43080ae183da36b971981e8ad00882) [#7329](https://github.com/npm/cli/pull/7329) `minimatch@9.0.4`
+* [`c9315cb`](https://github.com/npm/cli/commit/c9315cb240be02babbbd99585f7ef23679e1d963) [#7329](https://github.com/npm/cli/pull/7329) `binary-extensions@2.3.0`
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.4.1): `@npmcli/arborist@7.4.1`
+
+## [6.0.7](https://github.com/npm/cli/compare/libnpmdiff-v6.0.6...libnpmdiff-v6.0.7) (2024-02-28)
+
+### Dependencies
+
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.4.0): `@npmcli/arborist@7.4.0`
+
 ## [6.0.6](https://github.com/npm/cli/compare/libnpmdiff-v6.0.5...libnpmdiff-v6.0.6) (2024-01-24)
 
 ### Dependencies

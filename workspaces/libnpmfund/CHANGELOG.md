@@ -1,5 +1,55 @@
 # Changelog
 
+### Dependencies
+
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.5.2): `@npmcli/arborist@7.5.2`
+
+## [5.0.11](https://github.com/npm/cli/compare/libnpmfund-v5.0.10...libnpmfund-v5.0.11) (2024-05-29)
+
+### Bug Fixes
+
+* [`2d1d8d0`](https://github.com/npm/cli/commit/2d1d8d0ef18a10ac7938380884745f1d3c3cb078) [#7559](https://github.com/npm/cli/pull/7559) adds `node:` specifier to all native node modules (#7559) (@reggi)
+
+
+### Dependencies
+
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.5.3): `@npmcli/arborist@7.5.3`
+
+## [5.0.9](https://github.com/npm/cli/compare/libnpmfund-v5.0.8...libnpmfund-v5.0.9) (2024-04-30)
+
+### Bug Fixes
+
+* [`3ec86a0`](https://github.com/npm/cli/commit/3ec86a0e258b1d5f5182f0093adf43c54e82578e) [#7456](https://github.com/npm/cli/pull/7456) linting: no-unused-vars (#7456) (@wraithgar)
+* [`57ebebf`](https://github.com/npm/cli/commit/57ebebf03d55d4eda2b6439149a97b595a191aaf) [#7418](https://github.com/npm/cli/pull/7418) update repository.url in package.json (#7418) (@wraithgar)
+
+### Dependencies
+
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.5.1): `@npmcli/arborist@7.5.1`
+
+## [5.0.8](https://github.com/npm/cli/compare/libnpmfund-v5.0.7...libnpmfund-v5.0.8) (2024-04-25)
+
+### Dependencies
+
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.5.0): `@npmcli/arborist@7.5.0`
+
+## [5.0.7](https://github.com/npm/cli/compare/libnpmfund-v5.0.6...libnpmfund-v5.0.7) (2024-04-10)
+
+### Dependencies
+
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.4.2): `@npmcli/arborist@7.4.2`
+
+## [5.0.6](https://github.com/npm/cli/compare/libnpmfund-v5.0.5...libnpmfund-v5.0.6) (2024-04-03)
+
+### Dependencies
+
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.4.1): `@npmcli/arborist@7.4.1`
+
+## [5.0.5](https://github.com/npm/cli/compare/libnpmfund-v5.0.4...libnpmfund-v5.0.5) (2024-02-28)
+
+### Dependencies
+
+* [workspace](https://github.com/npm/cli/releases/tag/arborist-v7.4.0): `@npmcli/arborist@7.4.0`
+
 ## [5.0.4](https://github.com/npm/cli/compare/libnpmfund-v5.0.3...libnpmfund-v5.0.4) (2024-01-24)
 
 ### Dependencies

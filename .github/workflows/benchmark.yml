@@ -53,7 +53,7 @@ jobs:
               await github.rest.reactions.createForIssueComment({
                 owner,
                 repo,
-                comment_id: payload.comment.node_id,
+                comment_id: payload.comment.id,
                 content: 'rocket',
               })
             }
@@ -71,7 +71,7 @@ jobs:
             const targetSpec = matchesRelease ? matchesRelease[1] : 'latest'
             core.info(`Target spec: ${targetSpec}`)
 
-            const eventType = `"${eventName} ${owner}/${repo}#${pullRequest.number}"`
+            const eventType = `${eventName} ${owner}/${repo}#${pullRequest.number}`
             core.info(`Event type: ${eventType}`)
           
             await github.rest.repos.createDispatchEvent({

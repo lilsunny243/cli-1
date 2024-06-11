@@ -1,4 +1,4 @@
-const { resolve } = require('path')
+const { resolve } = require('node:path')
 
 const t = require('tap')
 const Arborist = require('../../lib/arborist/index.js')
@@ -80,17 +80,16 @@ t.test('prune with lockfile omit dev', async t => {
 })
 
 t.test('prune omit dev with bins', async t => {
-  const fs = require('fs')
-  const { promisify } = require('util')
-  const readdir = promisify(fs.readdir)
+  const { readdir } = require('node:fs/promises')
+  const { statSync, lstatSync } = require('node:fs')
   const path = fixture(t, 'prune-dev-bins')
 
   // should have bin files
   const reifiedBin = resolve(path, 'node_modules/.bin/yes')
   if (process.platform === 'win32') {
-    t.ok(fs.statSync(reifiedBin + '.cmd').isFile(), 'should have shim')
+    t.ok(statSync(reifiedBin + '.cmd').isFile(), 'should have shim')
   } else {
-    t.ok(fs.lstatSync(reifiedBin).isSymbolicLink(), 'should have symlink')
+    t.ok(lstatSync(reifiedBin).isSymbolicLink(), 'should have symlink')
   }
 
   // PRUNE things
@@ -107,15 +106,15 @@ t.test('prune omit dev with bins', async t => {
   // should also remove ./bin/* files
   const bin = resolve(path, 'node_modules/.bin/yes')
   if (process.platform === 'win32') {
-    t.throws(() => fs.statSync(bin + '.cmd').isFile(), /ENOENT/, 'should not have shim')
+    t.throws(() => statSync(bin + '.cmd').isFile(), /ENOENT/, 'should not have shim')
   } else {
-    t.throws(() => fs.lstatSync(bin).isSymbolicLink(), /ENOENT/, 'should not have symlink')
+    t.throws(() => lstatSync(bin).isSymbolicLink(), /ENOENT/, 'should not have symlink')
   }
 })
 
 t.test('prune workspaces', async t => {
-  const fs = require('fs')
-  const { join } = require('path')
+  const fs = require('node:fs')
+  const { join } = require('node:path')
   const path = t.testdir({
     'package.json': JSON.stringify({
       name: 'prune-workspaces',

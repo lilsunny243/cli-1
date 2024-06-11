@@ -1,8 +1,8 @@
 const Arborist = require('@npmcli/arborist')
-const os = require('os')
-const { readFileSync } = require('fs')
-const { join } = require('path')
-const log = require('proc-log')
+const os = require('node:os')
+const { readFileSync } = require('node:fs')
+const { join } = require('node:path')
+const { log } = require('proc-log')
 const { run, CWD, pkg, fs, EOL } = require('./util.js')
 
 // Generates our dependency graph documents in DEPENDENCIES.md.
