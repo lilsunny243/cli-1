@@ -4,6 +4,17 @@ const npa = require('npm-package-arg')
 const Nock = require('nock')
 const stringify = require('json-stringify-safe')
 
+const logReq = (req, ...keys) => {
+  const obj = JSON.parse(stringify(req))
+  const res = {}
+  for (const [k, v] of Object.entries(obj)) {
+    if (!keys.includes(k)) {
+      res[k] = v
+    }
+  }
+  return stringify(res, null, 2)
+}
+
 class MockRegistry {
   #tap
   #nock
@@ -32,6 +43,7 @@ class MockRegistry {
   static tnock (t, host, opts, { debug = false, strict = false } = {}) {
     const noMatch = (req) => {
       if (debug) {
+        /* eslint-disable-next-line no-console */
         console.error('NO MATCH', t.name, req.options ? req.options : req.path)
       }
       if (strict) {
@@ -40,7 +52,8 @@ class MockRegistry {
         // mocked with a 404, 500, etc.
         // XXX: this is opt-in currently because it breaks some existing CLI
         // tests. We should work towards making this the default for all tests.
-        t.fail(`Unmatched request: ${stringify(req, null, 2)}`)
+        t.comment(logReq(req, 'interceptors', 'socket', 'response', '_events'))
+        t.fail(`Unmatched request: ${req.method} ${req.path}`)
       }
     }
 
@@ -225,13 +238,12 @@ class MockRegistry {
     })
   }
 
-  webadduser ({ username, password, token = 'npm_default-test-token' }) {
+  webadduser ({ token = 'npm_default-test-token' }) {
     const doneUrl = new URL('/npm-cli-test/done', this.origin).href
     const loginUrl = new URL('/npm-cli-test/login', this.origin).href
     this.nock = this.nock
       .post(this.fullPath('/-/v1/login'), body => {
         this.#tap.ok(body.create) // Sole difference from weblogin
-        this.#tap.ok(body.hostname)
         return true
       })
       .reply(200, { doneUrl, loginUrl })
@@ -243,8 +255,7 @@ class MockRegistry {
     const doneUrl = new URL('/npm-cli-test/done', this.origin).href
     const loginUrl = new URL('/npm-cli-test/login', this.origin).href
     this.nock = this.nock
-      .post(this.fullPath('/-/v1/login'), body => {
-        this.#tap.ok(body.hostname)
+      .post(this.fullPath('/-/v1/login'), () => {
         return true
       })
       .reply(200, { doneUrl, loginUrl })
@@ -334,6 +345,31 @@ class MockRegistry {
     this.nock = nock
   }
 
+  getTokens (tokens) {
+    return this.nock.get('/-/npm/v1/tokens')
+      .reply(200, {
+        objects: tokens,
+        urls: {},
+        total: tokens.length,
+        userHasOldFormatToken: false,
+      })
+  }
+
+  createToken ({ password, readonly = false, cidr = [] }) {
+    return this.nock.post('/-/npm/v1/tokens', {
+      password,
+      readonly,
+      cidr_whitelist: cidr,
+    }).reply(200, {
+      key: 'n3wk3y',
+      token: 'n3wt0k3n',
+      created: new Date(),
+      updated: new Date(),
+      readonly,
+      cidr_whitelist: cidr,
+    })
+  }
+
   async package ({ manifest, times = 1, query, tarballs }) {
     let nock = this.nock
     const spec = npa(manifest.name)
@@ -414,6 +450,50 @@ class MockRegistry {
       description: 'mocked test package',
       dependencies: {},
       ...packument,
+    }
+  }
+
+  /**
+   * this is a simpler convience method for creating mockable registry with
+   * tarballs for specific versions
+   */
+  async setup (packages) {
+    const format = Object.keys(packages).map(v => {
+      const [name, version] = v.split('@')
+      return { name, version }
+    }).reduce((acc, inc) => {
+      const exists = acc.find(pkg => pkg.name === inc.name)
+      if (exists) {
+        exists.tarballs = {
+          ...exists.tarballs,
+          [inc.version]: packages[`${inc.name}@${inc.version}`],
+        }
+      } else {
+        acc.push({ name: inc.name,
+          tarballs: {
+            [inc.version]: packages[`${inc.name}@${inc.version}`],
+          },
+        })
+      }
+      return acc
+    }, [])
+    const registry = this
+    for (const pkg of format) {
+      const { name, tarballs } = pkg
+      const versions = Object.keys(tarballs)
+      const manifest = await registry.manifest({ name, versions })
+
+      for (const version of versions) {
+        const tarballPath = pkg.tarballs[version]
+        if (!tarballPath) {
+          throw new Error(`Tarball path not provided for version ${version}`)
+        }
+
+        await registry.tarball({
+          manifest: manifest.versions[version],
+          tarball: tarballPath,
+        })
+      }
     }
   }
 }

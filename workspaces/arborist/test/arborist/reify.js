@@ -1,47 +1,17 @@
-const { join, resolve, basename } = require('path')
+const { join, resolve, basename } = require('node:path')
 const t = require('tap')
 const runScript = require('@npmcli/run-script')
 const localeCompare = require('@isaacs/string-locale-compare')('en')
 const tnock = require('../fixtures/tnock')
-const fs = require('fs')
-const fsp = require('fs/promises')
+const fs = require('node:fs')
+const fsp = require('node:fs/promises')
 const npmFs = require('@npmcli/fs')
 
 let failRm = false
 let failRename = null
 let failRenameOnce = null
 let failMkdir = null
-const { rename: realRename, rm: realRm, mkdir: realMkdir } = fs
-const fsMock = {
-  ...fs,
-  mkdir (...args) {
-    if (failMkdir) {
-      process.nextTick(() => args.pop()(failMkdir))
-      return
-    }
 
-    return realMkdir(...args)
-  },
-  rename (...args) {
-    if (failRename) {
-      process.nextTick(() => args.pop()(failRename))
-    } else if (failRenameOnce) {
-      const er = failRenameOnce
-      failRenameOnce = null
-      process.nextTick(() => args.pop()(er))
-    } else {
-      return realRename(...args)
-    }
-  },
-  rm (...args) {
-    if (failRm) {
-      process.nextTick(() => args.pop()(new Error('rm fail')))
-      return
-    }
-
-    realRm(...args)
-  },
-}
 const fspMock = {
   ...fsp,
   mkdir: async (...args) => {
@@ -70,11 +40,11 @@ const fspMock = {
     return fsp.rm(...args)
   },
 }
+
 // need this to be injected so that it doesn't pull from main cache
 const { moveFile } = t.mock('@npmcli/fs', { 'fs/promises': fspMock })
 const mocks = {
-  fs: fsMock,
-  'fs/promises': fspMock,
+  'node:fs/promises': fspMock,
   '@npmcli/fs': { ...npmFs, moveFile },
 }
 
@@ -97,6 +67,16 @@ const warningTracker = () => {
   process.on('log', onlog)
   return () => {
     process.removeListener('log', onlog)
+    return list
+  }
+}
+
+const outputTracker = () => {
+  const list = []
+  const onlog = (...msg) => msg[0] === 'standard' && list.push(msg)
+  process.on('output', onlog)
+  return () => {
+    process.removeListener('output', onlog)
     return list
   }
 }
@@ -127,7 +107,6 @@ const {
   stop,
   registry,
   advisoryBulkResponse,
-  oneSocket,
 } = require('../fixtures/server.js')
 
 t.before(start)
@@ -176,7 +155,7 @@ t.test('update a yarn.lock file', async t => {
 })
 
 t.test('weirdly broken lockfile without resolved value', t =>
-  t.resolveMatchSnapshot(printReified(fixture(t, 'dep-missing-resolved'), oneSocket(t))))
+  t.resolveMatchSnapshot(printReified(fixture(t, 'dep-missing-resolved'))))
 
 t.test('testing-peer-deps package', t =>
   t.resolveMatchSnapshot(printReified(fixture(t, 'testing-peer-deps'))))
@@ -237,17 +216,17 @@ t.test('omit peer deps', t => {
   // in this one we also snapshot the timers, mostly just as a smoke test
   const timers = {}
   const finishedTimers = []
-  const onTime = name => {
-    t.notOk(timers[name], 'should not have duplicated timers started')
-    timers[name] = true
-  }
-  const onTimeEnd = name => {
-    t.ok(timers[name], 'should not end unstarted timer')
-    delete timers[name]
-    finishedTimers.push(name)
+  const onTime = (level, name) => {
+    if (level === 'start') {
+      t.notOk(timers[name], 'should not have duplicated timers started')
+      timers[name] = true
+    } else if (level === 'end') {
+      t.ok(timers[name], 'should not end unstarted timer')
+      delete timers[name]
+      finishedTimers.push(name)
+    }
   }
   process.on('time', onTime)
-  process.on('timeEnd', onTimeEnd)
 
   return reify(path, { omit: ['peer'] })
     .then(tree => {
@@ -268,7 +247,6 @@ t.test('omit peer deps', t => {
   // eslint-disable-next-line promise/always-return
     .then(() => {
       process.removeListener('time', onTime)
-      process.removeListener('timeEnd', onTimeEnd)
       finishedTimers.sort(localeCompare)
       t.matchSnapshot(finishedTimers, 'finished timers')
       t.strictSame(timers, {}, 'should have no timers in progress now')
@@ -783,7 +761,7 @@ t.test('rollbacks', { buffered: false }, t => {
     const check = warningTracker()
     return t.rejects(a.reify({
       update: ['@isaacs/testing-bundledeps-parent'],
-    }).then(tree => 'it worked'), new Error('poop'))
+    }).then(() => 'it worked'), new Error('poop'))
     // eslint-disable-next-line promise/always-return
       .then(() => {
         const warnings = check()
@@ -835,7 +813,7 @@ t.test('rollbacks', { buffered: false }, t => {
     a[kLoadBundles] = (depth, bundlesByDepth) => {
       const kRN = Symbol.for('reifyNode')
       const reifyNode = a[kRN]
-      a[kRN] = node => {
+      a[kRN] = () => {
         a[kRN] = reifyNode
         return Promise.reject(new Error('poop'))
       }
@@ -853,7 +831,7 @@ t.test('rollbacks', { buffered: false }, t => {
     a[kUnpack] = () => {
       const kReify = Symbol.for('reifyNode')
       const reifyNode = a[kReify]
-      a[kReify] = node => {
+      a[kReify] = () => {
         a[kReify] = reifyNode
         return Promise.reject(new Error('poop'))
       }
@@ -1439,7 +1417,7 @@ t.test('do not reify root when root matches duplicated metadep', async t => {
 
 t.test('reify properly with all deps when lockfile is ancient', async t => {
   const path = fixture(t, 'sax')
-  const tree = await reify(path, oneSocket(t))
+  const tree = await reify(path)
   t.matchSnapshot(printTree(tree))
   fs.statSync(path + '/node_modules/tap/node_modules/.bin/nyc')
 })
@@ -1495,7 +1473,7 @@ t.test('rollback if process is terminated during reify process', async t => {
   const onExit = require('../../lib/signal-handling.js')
   // mock the process so we don't have to kill this test
   // copy-pasta from signal-handling test
-  const EE = require('events')
+  const EE = require('node:events')
   const proc = onExit.process = new class MockProcess extends EE {
     constructor () {
       super()
@@ -2594,19 +2572,12 @@ t.test('runs dependencies script if tree changes', async (t) => {
     t.not(fs.existsSync(expectedPath), `did not run ${script}`)
   }
 
-  // take over console.log as run-script is going to print a banner for these because
-  // they're running in the foreground
-  const _log = console.log
-  t.teardown(() => {
-    console.log = _log
-  })
-  const logs = []
-  console.log = (msg) => logs.push(msg)
+  const outputs = outputTracker()
+
   // reify again, this time adding a new dependency
   await reify(path, { foregroundScripts: true, add: ['once@^1.4.0'] })
-  console.log = _log
 
-  t.match(logs, [/predependencies/, /dependencies/, /postdependencies/], 'logged banners')
+  t.match(outputs(), [/predependencies/, /dependencies/, /postdependencies/], 'logged banners')
 
   // files should exist again
   for (const script of ['predependencies', 'dependencies', 'postdependencies']) {

@@ -1,9 +1,9 @@
 const t = require('tap')
 const _trashList = Symbol.for('trashList')
 const Arborist = require('../../lib/arborist/index.js')
-const { resolve, dirname } = require('path')
-const os = require('os')
-const fs = require('fs')
+const { resolve, dirname } = require('node:path')
+const os = require('node:os')
+const fs = require('node:fs')
 const fixtures = resolve(__dirname, '../fixtures')
 const relpath = require('../../lib/relpath.js')
 const localeCompare = require('@isaacs/string-locale-compare')('en')
@@ -13,7 +13,7 @@ const fixture = (t, p) => require(`${fixtures}/reify-cases/${p}`)(t)
 const isWindows = process.platform === 'win32'
 const PORT = 12345 + (+process.env.TAP_CHILD_ID || 0)
 
-const server = require('http').createServer(() => {
+const server = require('node:http').createServer(() => {
   throw new Error('rebuild should not hit the registry')
 })
 t.before(() => new Promise(res => {
@@ -197,7 +197,7 @@ t.test('verify dep flags in script environments', async t => {
     const file = resolve(path, 'node_modules', pkg, 'env')
     t.strictSame(flags, fs.readFileSync(file, 'utf8').split('\n'), pkg)
   }
-  t.strictSame(checkLogs().sort((a, b) =>
+  t.strictSame(checkLogs().filter(l => l[0] === 'info' && l[1] === 'run').sort((a, b) =>
     localeCompare(a[2], b[2]) || (typeof a[4] === 'string' ? -1 : 1)), [
     ['info', 'run', 'devdep@1.0.0', 'postinstall', 'node_modules/devdep', 'node ../../env.js'],
     ['info', 'run', 'devdep@1.0.0', 'postinstall', { code: 0, signal: null }],
@@ -438,7 +438,7 @@ t.test('rebuild node-gyp dependencies lacking both preinstall and install script
 t.test('do not rebuild node-gyp dependencies with gypfile:false', async t => {
   // use require-inject so we don't need an actual massive binary dep fixture
   const Arborist = t.mock('../../lib/arborist/index.js', {
-    '@npmcli/run-script': async opts => {
+    '@npmcli/run-script': async () => {
       throw new Error('should not run any scripts')
     },
   })

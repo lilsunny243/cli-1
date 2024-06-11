@@ -16,7 +16,7 @@ const {
 t.before(start)
 t.teardown(stop)
 
-const { resolve } = require('path')
+const { resolve } = require('node:path')
 const fixtures = resolve(__dirname, 'fixtures')
 
 const cache = t.testdir()
@@ -222,7 +222,7 @@ t.test('audit returns an error', async t => {
   const report = await AuditReport.load(tree, arb.options)
   t.equal(report.report, null, 'did not get audit response')
   t.equal(report.size, 0, 'did not find any vulnerabilities')
-  t.match(logs, [
+  t.match(logs.filter(l => l[1].includes('audit')), [
     [
       'silly',
       'audit',

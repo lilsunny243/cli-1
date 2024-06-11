@@ -16,16 +16,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/npm/cli.git",
+    "url": "git+https://github.com/npm/cli.git",
     "directory": "docs"
   },
   "devDependencies": {
     "@isaacs/string-locale-compare": "^1.1.0",
     "@npmcli/eslint-config": "^4.0.0",
-    "@npmcli/template-oss": "4.21.3",
+    "@npmcli/template-oss": "4.22.0",
     "front-matter": "^4.0.2",
-    "ignore-walk": "^6.0.1",
-    "jsdom": "^21.1.0",
+    "ignore-walk": "^6.0.5",
+    "jsdom": "^24.0.0",
     "rehype-stringify": "^9.0.3",
     "remark-gfm": "^3.0.1",
     "remark-man": "^8.0.1",
@@ -55,7 +55,7 @@
   "templateOSS": {
     "//@npmcli/template-oss": "This file is partially managed by @npmcli/template-oss. Edits may be overwritten.",
     "ciVersions": "latest",
-    "version": "4.21.3",
+    "version": "4.22.0",
     "content": "../scripts/template-oss/index.js",
     "workspaceRepo": {
       "add": {
